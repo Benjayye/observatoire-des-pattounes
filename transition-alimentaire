@@ -132,12 +132,6 @@
       margin-bottom: 1em;
       font-weight: 600;
     }
-    .newsletter p {
-      font-size: 0.95em;
-      color: #6b7280;
-      text-align: center;
-      margin-top: 0.8em;
-    }
     /* Masquer le texte Kessel tout savoir */
     .newsletter p:has(span) {
       display: none !important;
@@ -192,6 +186,7 @@
   <script>
     function getTransitionSteps(duration) {
       let steps = [];
+      duration = Number(duration);
       if (duration === 7) {
         // 4 phases
         const phases = [
