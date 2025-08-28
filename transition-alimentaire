@@ -159,12 +159,6 @@
       <input type="text" id="currentBrand" name="currentBrand" required placeholder="Ex : Royal Canin">
       <label for="newBrand">Nouvelle marque ou 'fait maison' :</label>
       <input type="text" id="newBrand" name="newBrand" required placeholder="Ex : Purina ou fait maison">
-      <label for="duration">Durée de transition (jours) :</label>
-      <select id="duration" name="duration">
-        <option value="7">7 jours</option>
-        <option value="10">10 jours</option>
-        <option value="14">14 jours</option>
-      </select>
       <label for="userEmail">Votre email :</label>
       <input type="email" id="userEmail" name="userEmail" required placeholder="votre@email.com">
       <button type="submit">Mon calendrier ci-dessous</button>
@@ -183,24 +177,24 @@
       frameborder="0"
       scrolling="no">
     </iframe>
-    <p>
-      Votre email sera utilisé uniquement pour l’envoi des conseils et du calendrier.
-    </p>
   </div>
   <script>
     function getTransitionSteps(duration) {
+      // Pour une transition sur 30 jours, on peut avoir 6 phases de 5 jours chacune
       const steps = [];
       const phases = [
+        { ratio: 0.90, label: "90% ancienne, 10% nouvelle" },
         { ratio: 0.75, label: "75% ancienne, 25% nouvelle" },
-        { ratio: 0.5, label: "50% ancienne, 50% nouvelle" },
+        { ratio: 0.50, label: "50% ancienne, 50% nouvelle" },
         { ratio: 0.25, label: "25% ancienne, 75% nouvelle" },
+        { ratio: 0.10, label: "10% ancienne, 90% nouvelle" },
         { ratio: 0.0, label: "100% nouvelle alimentation" }
       ];
-      const daysPerPhase = Math.floor(duration / phases.length);
+      const phaseDays = [5, 5, 5, 5, 5, 5];
       let day = 1;
       for (let i = 0; i < phases.length; i++) {
         let startDay = day;
-        let endDay = i === phases.length - 1 ? duration : day + daysPerPhase - 1;
+        let endDay = day + phaseDays[i] - 1;
         steps.push({
           label: phases[i].label,
           from: startDay,
@@ -212,9 +206,11 @@
       return steps;
     }
     function getAdvice(ratio) {
-      if (ratio === 0.75) return "Surveillez les selles et l’appétit. Premiers changements, soyez attentif à tout signe de gêne digestive.";
-      if (ratio === 0.5) return "Continuez la surveillance. Si tout va bien, vous pouvez poursuivre.";
+      if (ratio === 0.90) return "Débutez la transition tout en surveillant bien les selles et l’appétit.";
+      if (ratio === 0.75) return "Continuez progressivement, soyez attentif à tout signe de gêne digestive.";
+      if (ratio === 0.50) return "Votre animal s’habitue, la moitié de la ration est nouvelle.";
       if (ratio === 0.25) return "La majorité de la nouvelle alimentation est introduite. Restez attentif aux réactions.";
+      if (ratio === 0.10) return "Presque toute la ration est nouvelle, soyez vigilant encore quelques jours.";
       if (ratio === 0.0) return "La transition est terminée ! Continuez à surveiller pendant quelques jours.";
       return "";
     }
@@ -223,11 +219,10 @@
       const animal = document.getElementById('animal').value;
       const currentBrand = document.getElementById('currentBrand').value;
       const newBrand = document.getElementById('newBrand').value;
-      const duration = parseInt(document.getElementById('duration').value);
 
-      const steps = getTransitionSteps(duration);
+      const steps = getTransitionSteps(30); // Transition sur 30 jours
       let html = `<h2>Calendrier de transition pour votre ${animal}</h2>`;
-      html += `<p>De ${currentBrand} vers ${newBrand} sur ${duration} jours.</p>`;
+      html += `<p>De ${currentBrand} vers ${newBrand} sur 30 jours.</p>`;
       steps.forEach(step => {
         html += `<div class="step">
           Jours ${step.from} à ${step.to} : ${step.label}<br>
