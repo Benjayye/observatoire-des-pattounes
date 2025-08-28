@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Configurateur de Transition Alimentaire</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+    }
+    .container {
+      max-width: 540px;
+      margin: 3em auto 2em auto;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 4px 24px rgba(71, 95, 180, 0.10);
+      padding: 2em 2em 1em 2em;
+    }
+    h1 {
+      text-align: center;
+      color: #4757b8;
+      font-weight: 700;
+      margin-bottom: 1.5em;
+      letter-spacing: 1px;
+    }
+    .config-form label {
+      display: block;
+      margin-top: 1em;
+      color: #5963b3;
+      font-weight: 500;
+    }
+    .config-form input,
+    .config-form select {
+      width: 100%;
+      padding: 0.6em;
+      margin-top: 0.4em;
+      border: 1px solid #d6d6f5;
+      border-radius: 8px;
+      background: #f3f4fa;
+      font-size: 1em;
+      transition: border-color 0.2s;
+    }
+    .config-form input:focus,
+    .config-form select:focus {
+      border-color: #a0b5fc;
+      outline: none;
+    }
+    .config-form button {
+      margin-top: 2em;
+      width: 100%;
+      padding: 0.8em;
+      background: linear-gradient(90deg,#8dc2ff 0%, #4757b8 100%);
+      color: white;
+      font-weight: 600;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(71, 87, 184, 0.13);
+      cursor: pointer;
+      transition: background 0.2s, transform 0.18s;
+    }
+    .config-form button:hover {
+      background: linear-gradient(90deg,#4757b8 0%, #8dc2ff 100%);
+      transform: translateY(-2px) scale(1.02);
+    }
+    .mention {
+      font-size: 0.97em;
+      color: #6b7280;
+      margin-top: 1em;
+      text-align: center;
+      background: #e0e7ff;
+      border-radius: 6px;
+      padding: 0.7em;
+    }
+    .success {
+      color: #10b981;
+      margin-top: 1.2em;
+      text-align: center;
+      font-size: 1.05em;
+      font-weight: 500;
+    }
+    .calendar {
+      margin: 2.5em auto 0 auto;
+      padding: 1.5em;
+      background: #f4f7fd;
+      border-radius: 14px;
+      box-shadow: 0 2px 14px rgba(71, 95, 180, 0.07);
+      max-width: 520px;
+    }
+    .calendar h2 {
+      color: #4757b8;
+      font-size: 1.2em;
+      margin-bottom: 1em;
+      text-align: center;
+      font-weight: 600;
+    }
+    .calendar p {
+      color: #3d4466;
+      font-size: 1.05em;
+      text-align: center;
+    }
+    .step {
+      margin-bottom: 1.1em;
+      padding: 1em;
+      border: 1px solid #c7d2fe;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #e0e7ff 0%, #f8fafc 100%);
+      box-shadow: 0 2px 8px rgba(71, 87, 184, 0.06);
+      color: #2b2e4a;
+    }
+    .step em {
+      color: #4757b8;
+      font-style: normal;
+      font-weight: 500;
+    }
+    .newsletter {
+      margin: 2em auto;
+      max-width: 480px;
+      background: #f4f7fd;
+      border-radius: 14px;
+      box-shadow: 0 2px 14px rgba(71, 95, 180, 0.07);
+      padding: 1.2em;
+    }
+    .newsletter h2 {
+      color: #4757b8;
+      font-size: 1.08em;
+      text-align: center;
+      margin-bottom: 1em;
+      font-weight: 600;
+    }
+    .newsletter p {
+      font-size: 0.95em;
+      color: #6b7280;
+      text-align: center;
+      margin-top: 0.8em;
+    }
+    @media screen and (max-width: 600px) {
+      .container, .calendar, .newsletter {
+        padding: 1em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Transition Alimentaire Chien ou Chat</h1>
+    <form id="configForm" class="config-form">
+      <label for="animal">Animal :</label>
+      <select id="animal" name="animal" required>
+        <option value="">--Choisir--</option>
+        <option value="chien">Chien</option>
+        <option value="chat">Chat</option>
+      </select>
+      <label for="currentBrand">Marque actuelle :</label>
+      <input type="text" id="currentBrand" name="currentBrand" required placeholder="Ex : Royal Canin">
+      <label for="newBrand">Nouvelle marque ou 'fait maison' :</label>
+      <input type="text" id="newBrand" name="newBrand" required placeholder="Ex : Purina ou fait maison">
+      <label for="userEmail">Votre email :</label>
+      <input type="email" id="userEmail" name="userEmail" required placeholder="votre@email.com">
+      <button type="submit">Mon calendrier ci-dessous</button>
+      <div class="mention">
+        Vous serez inscrit à notre newsletter "Observatoire des Pattounes", vous pourrez vous désinscrire à tout moment.
+      </div>
+      <div id="formSuccess" class="success"></div>
+    </form>
+    <div id="calendar" class="calendar"></div>
+  </div>
+  <!-- Bloc newsletter kessel -->
+  <div class="newsletter">
+    <h2>S'inscrire à la newsletter : conseils & rappels</h2>
+    <iframe
+      src="https://animodom.kessel.media/iframe" width="480" height="320"
+      frameborder="0"
+      scrolling="no">
+    </iframe>
+  </div>
+  <script>
+    function getTransitionSteps(duration) {
+      // Pour une transition sur 30 jours, on peut avoir 6 phases de 5 jours chacune
+      const steps = [];
+      const phases = [
+        { ratio: 0.90, label: "90% ancienne, 10% nouvelle" },
+        { ratio: 0.75, label: "75% ancienne, 25% nouvelle" },
+        { ratio: 0.50, label: "50% ancienne, 50% nouvelle" },
+        { ratio: 0.25, label: "25% ancienne, 75% nouvelle" },
+        { ratio: 0.10, label: "10% ancienne, 90% nouvelle" },
+        { ratio: 0.0, label: "100% nouvelle alimentation" }
+      ];
+      const phaseDays = [5, 5, 5, 5, 5, 5];
+      let day = 1;
+      for (let i = 0; i < phases.length; i++) {
+        let startDay = day;
+        let endDay = day + phaseDays[i] - 1;
+        steps.push({
+          label: phases[i].label,
+          from: startDay,
+          to: endDay,
+          advice: getAdvice(phases[i].ratio)
+        });
+        day = endDay + 1;
+      }
+      return steps;
+    }
+    function getAdvice(ratio) {
+      if (ratio === 0.90) return "Débutez la transition tout en surveillant bien les selles et l’appétit.";
+      if (ratio === 0.75) return "Continuez progressivement, soyez attentif à tout signe de gêne digestive.";
+      if (ratio === 0.50) return "Votre animal s’habitue, la moitié de la ration est nouvelle.";
+      if (ratio === 0.25) return "La majorité de la nouvelle alimentation est introduite. Restez attentif aux réactions.";
+      if (ratio === 0.10) return "Presque toute la ration est nouvelle, soyez vigilant encore quelques jours.";
+      if (ratio === 0.0) return "La transition est terminée ! Continuez à surveiller pendant quelques jours.";
+      return "";
+    }
+    document.getElementById('configForm').onsubmit = function(e) {
+      e.preventDefault();
+      const animal = document.getElementById('animal').value;
+      const currentBrand = document.getElementById('currentBrand').value;
+      const newBrand = document.getElementById('newBrand').value;
+
+      const steps = getTransitionSteps(30); // Transition sur 30 jours
+      let html = `<h2>Calendrier de transition pour votre ${animal}</h2>`;
+      html += `<p>De ${currentBrand} vers ${newBrand} sur 30 jours.</p>`;
+      steps.forEach(step => {
+        html += `<div class="step">
+          Jours ${step.from} à ${step.to} : ${step.label}<br>
+          <em>Conseil :</em> ${step.advice}
+        </div>`;
+      });
+      html += "<p>Conseils généraux : Si votre animal présente des signes de troubles digestifs (diarrhée, vomissements, perte d’appétit), ralentissez la transition ou consultez votre vétérinaire.</p>";
+      document.getElementById('calendar').innerHTML = html;
+    };
+  </script>
+</body>
+</html>
